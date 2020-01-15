@@ -1,4 +1,5 @@
 import java.util.Formatter;
+import java.util.Objects;
 
 /**
  * A naked recursive list of integers, similar to what we saw in lecture 3, but
@@ -34,10 +35,9 @@ public class IntList {
     }
 
     /**
-     * Returns a list equal to L with all elements squared. Destructive.
+     * Modifies a list equal to L with all elements squared. Destructive.
      */
     public static void dSquareList(IntList L) {
-
         while (L != null) {
             L.first = L.first * L.first;
             L = L.rest;
@@ -45,7 +45,7 @@ public class IntList {
     }
 
     /**
-     * Returns a list equal to L with all elements squared. Non-destructive.
+     * Returns a list equal to L with all elements squared, using iteration. Non-destructive.
      */
     public static IntList squareListIterative(IntList L) {
         if (L == null) {
@@ -63,7 +63,7 @@ public class IntList {
     }
 
     /**
-     * Returns a list equal to L with all elements squared. Non-destructive.
+     * Returns a list equal to L with all elements squared, using recursion. Non-destructive.
      */
     public static IntList squareListRecursive(IntList L) {
         if (L == null) {
@@ -81,8 +81,15 @@ public class IntList {
      */
 
     public static IntList dcatenate(IntList A, IntList B) {
-        //TODO:  fill in method
-        return null;
+        if (A == null) {
+            return null;
+        }
+        IntList ptr = A;
+        while (A.rest != null) {
+            A = A.rest;
+        }
+        A.rest = B;
+        return ptr;
     }
 
     /**
@@ -90,8 +97,26 @@ public class IntList {
      * * elements of B.  May NOT modify items of A.  Use 'new'.
      */
     public static IntList catenate(IntList A, IntList B) {
-        //TODO:  fill in method
-        return null;
+        if (A == null) {
+            return B;
+        }
+        if (B == null) {
+            return A;
+        }
+        IntList dummy = new IntList(0, null);
+        IntList prt = dummy;
+
+        while (A != null) {
+            prt.rest = new IntList(A.first, null);
+            A = A.rest;
+            prt = prt.rest;
+        }
+        while (B != null) {
+            prt.rest = new IntList(B.first, null);
+            B = B.rest;
+            prt = prt.rest;
+        }
+        return dummy.rest;
     }
 
 
