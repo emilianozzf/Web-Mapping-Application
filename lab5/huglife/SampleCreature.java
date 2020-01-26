@@ -59,7 +59,7 @@ public class SampleCreature extends Creature {
      */
     public SampleCreature(double e) {
         super("samplecreature");
-        energy = e;
+        super.energy = e;
     }
 
     /**
@@ -73,6 +73,7 @@ public class SampleCreature extends Creature {
      * Uses method from Occupant to return a color based on personal.
      * r, g, b values
      */
+    @Override
     public Color color() {
         return color(r, g, b);
     }
@@ -81,12 +82,14 @@ public class SampleCreature extends Creature {
      * Do nothing, SampleCreatures are pacifists and won't pick this
      * action anyway. C is safe, for now.
      */
+    @Override
     public void attack(Creature c) {
     }
 
     /**
      * Nothing special happens when a SampleCreature moves.
      */
+    @Override
     public void move() {
     }
 
@@ -97,6 +100,7 @@ public class SampleCreature extends Creature {
      * You will probably find the HugLifeUtils library useful for generating
      * random information.
      */
+    @Override
     public void stay() {
         r += HugLifeUtils.randomInt(-colorShift, colorShift);
         r = Math.min(r, 255);
@@ -140,8 +144,9 @@ public class SampleCreature extends Creature {
      * If somehow this method were called, it would return a new
      * SampleCreature.
      */
+    @Override
     public SampleCreature replicate() {
-        energy = energy * repEnergyRetained;
+        super.energy = super.energy * repEnergyRetained;
         double babyEnergy = energy * repEnergyGiven;
         return new SampleCreature(babyEnergy);
     }

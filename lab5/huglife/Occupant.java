@@ -18,14 +18,14 @@ public abstract class Occupant {
      * Creates an Occupant with name equal to N.
      */
     public Occupant(String n) {
-        name = n;
+        this.name = n;
     }
 
     /**
      * Returns the name of this occupant.
      */
     public String name() {
-        return name;
+        return this.name;
     }
 
     /**
