@@ -33,7 +33,7 @@ public class UnionFind {
     }
 
     /* Returns the size of the set v1 belongs to. */
-    private int sizeOf(int v1) {
+    public int sizeOf(int v1) {
         validate(v1);
         return - parent(find(v1));
     }
@@ -41,11 +41,10 @@ public class UnionFind {
     /* Returns the root of the set V belongs to. Path-compression is employed
        allowing for fast search-time. */
     private int find(int vertex) {
-        int root = vertex;
-        while (parent[root] >= 0) {
-            root = parent[root];
+        if (parent[vertex] >= 0) {
+            parent[vertex] = find(parent[vertex]);
         }
-        return root;
+        return parent[vertex];
     }
 
     /* Returns the parent of v1. If v1 is the root of a tree, returns the
