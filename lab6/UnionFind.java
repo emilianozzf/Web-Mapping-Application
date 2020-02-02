@@ -10,19 +10,6 @@ public class UnionFind {
         }
     }
 
-    /* Returns the size of the set v1 belongs to. */
-    public int sizeOf(int v1) {
-        validate(v1);
-        return - find(v1);
-    }
-
-    /* Throws an exception if v1 is not a valid index. */
-    private void validate(int vertex) throws IllegalArgumentException{
-        if (vertex >= parent.length) {
-            throw new IllegalArgumentException("the index is invalid");
-        }
-    }
-
     /* Returns true if nodes v1 and v2 are connected. */
     public boolean connected(int v1, int v2) {
         return find(v1) == find(v2);
@@ -34,29 +21,28 @@ public class UnionFind {
        vertex with itself or vertices that are already connected should not 
        change the sets but may alter the internal structure of the data. */
     public void union(int v1, int v2) {
-        int i = find(v1);
-        int j = find(v2);
-        if ((v1 == v2) || (i == j)) {
-            return;
+        if (!connected(v1, v2)) {
+            if (sizeOf(v1) > sizeOf(v2)) {
+                parent[find(v1)] -= sizeOf(v2);
+                parent[find(v2)] = find(v1);
+            } else {
+                parent[find(v2)] -= sizeOf(v1);
+                parent[find(v1)] = find(v2);
+            }
         }
+    }
 
-        if (parent[v1] <= parent[v2]) {
-            int weight1 = parent[v1];
-            parent[v1] = v2;
-            parent[v2] += weight1;
-        } else {
-            int weight2 = parent[v2];
-            parent[v2] = v1;
-            parent[v1] += weight2;
-        }
-
+    /* Returns the size of the set v1 belongs to. */
+    private int sizeOf(int v1) {
+        validate(v1);
+        return - parent(find(v1));
     }
 
     /* Returns the root of the set V belongs to. Path-compression is employed
        allowing for fast search-time. */
     private int find(int vertex) {
         int root = vertex;
-        while(parent[root] >= 0) {
+        while (parent[root] >= 0) {
             root = parent[root];
         }
         return root;
@@ -69,4 +55,10 @@ public class UnionFind {
         return parent[v1];
     }
 
+    /* Throws an exception if v1 is not a valid index. */
+    private void validate(int vertex) throws IllegalArgumentException{
+        if (vertex < 0 || vertex >= parent.length) {
+            throw new IllegalArgumentException("the index is invalid");
+        }
+    }
 }
