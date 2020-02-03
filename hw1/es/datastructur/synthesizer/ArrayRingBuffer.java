@@ -71,6 +71,15 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
         return rb[first];
     }
 
+    @Override
+    public boolean contains(T x) {
+        for (T item: rb) {
+            if (item == x) {
+                return true;
+            }
+        }
+        return false;
+    }
     // TODO: When you get to part 4, implement the needed code to support
     //       iteration and equals.
 }

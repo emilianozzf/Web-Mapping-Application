@@ -6,6 +6,7 @@ public interface BoundedQueue<T> {
   void enqueue(T x);  // add item x to the end
   T dequeue();        // delete and return item from the front
   T peek();           // return (but do not delete) item from the front
+  boolean contains(T x);
 
   default boolean isEmpty() {      // is the buffer empty (fillCount equals zero)?
     return fillCount() == 0;
