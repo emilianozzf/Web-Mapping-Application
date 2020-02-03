@@ -8,7 +8,7 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
         private int wizPos;
 
         public ArrayRingBufferIterator() {
-            this.wizPos = 0;
+            wizPos = 0;
         }
 
         @Override
@@ -24,17 +24,17 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
         }
     }
 
-    /* Index for the next dequeue or peek. */
+    /** Index for the next dequeue or peek. */
     private int first;
-    /* Index for the next enqueue. */
+    /** Index for the next enqueue. */
     private int last;
-    /* Variable for the fillCount. */
+    /** Variable for the fillCount. */
     private int fillCount;
-    /* Array for storing the buffer data. */
+    /** Array for storing the buffer data. */
     private T[] rb;
 
     /**
-     * Create a new ArrayRingBuffer with the given capacity.
+     * Creates a new ArrayRingBuffer with the given capacity.
      */
     public ArrayRingBuffer(int capacity) {
         first = 0;
@@ -43,11 +43,17 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
         rb = (T[]) new Object[capacity];
     }
 
+    /**
+     * Returns size of the buffer.
+     */
     @Override
     public int capacity() {
         return rb.length;
     }
 
+    /**
+     * Returns number of items currently in the buffer.
+     */
     @Override
     public int fillCount() {
         return fillCount;
@@ -101,10 +107,13 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
         return rb[first];
     }
 
+    /**
+     * Determines if a given item is in the buffer
+     */
     @Override
     public boolean contains(T x) {
         for (T item: rb) {
-            if (item == x) {
+            if (item.equals(x)) {
                 return true;
             }
         }
