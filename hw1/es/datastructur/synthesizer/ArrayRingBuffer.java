@@ -1,8 +1,29 @@
 package es.datastructur.synthesizer;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Objects;
 
 public class ArrayRingBuffer<T> implements BoundedQueue<T> {
+    private class ArrayRingBufferIterator implements Iterator<T> {
+        private int wizPos;
+
+        public ArrayRingBufferIterator() {
+            this.wizPos = 0;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return wizPos < fillCount;
+        }
+
+        @Override
+        public T next() {
+            T returnItem = rb[wizPos];
+            wizPos += 1;
+            return returnItem;
+        }
+    }
+
     /* Index for the next dequeue or peek. */
     private int first;
     /* Index for the next enqueue. */
@@ -38,6 +59,9 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
      */
     @Override
     public void enqueue(T x) {
+        if (isFull()) {
+            throw new RuntimeException("Ring buffer overflow");
+        }
         rb[last] = x;
         last += 1;
         if (last == capacity()) {
@@ -52,6 +76,9 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
      */
     @Override
     public T dequeue() {
+        if (isEmpty()) {
+            throw new RuntimeException("Ring buffer underflow");
+        }
         T item = rb[first];
         rb[first] = null;
         first += 1;
@@ -68,6 +95,9 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
      */
     @Override
     public T peek() {
+        if (isEmpty()) {
+            throw new RuntimeException("Ring buffer underflow");
+        }
         return rb[first];
     }
 
@@ -80,6 +110,31 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
         }
         return false;
     }
-    // TODO: When you get to part 4, implement the needed code to support
-    //       iteration and equals.
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || this.getClass() != o.getClass()) {
+            return false;
+        }
+        ArrayRingBuffer<?> that = (ArrayRingBuffer<?>) o;
+        return first == that.first &&
+               last == that.last &&
+               fillCount == that.fillCount &&
+               Arrays.equals(rb, that.rb);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(first, last, fillCount);
+        result = 31 * result + Arrays.hashCode(rb);
+        return result;
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new ArrayRingBufferIterator();
+    }
 }
