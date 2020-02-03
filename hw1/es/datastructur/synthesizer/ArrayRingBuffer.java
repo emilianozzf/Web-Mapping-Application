@@ -113,7 +113,7 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
     @Override
     public boolean contains(T x) {
         for (T item: rb) {
-            if (item.equals(x)) {
+            if (item == x) {
                 return true;
             }
         }
