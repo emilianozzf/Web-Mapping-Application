@@ -29,22 +29,28 @@ public interface BoundedQueue<T> extends Iterable<T> {
    * Adds item x to the end.
    *
    * @param x - the item to be added.
+   * @throws RuntimeException with the String “Ring Buffer overflow” when a user attempts to enqueue
+   *                          into a full ArrayRingBuffer.
    */
-  void enqueue(T x);
+  void enqueue(T x) throws RuntimeException;
 
   /**
    * Deletes and returns item from the front.
    *
    * @return the item from the front.
+   * @throws RuntimeException with the String “Ring Buffer underflow” when a user attempts to
+   *                          dequeue on an empty ArrayRingBuffer.
    */
-  T dequeue();
+  T dequeue() throws RuntimeException;
 
   /**
    * Returns (but do not delete) item from the front.
    *
    * @return (but do not delete) item from the front.
+   * @throws RuntimeException with the String “Ring Buffer underflow” when a user attempts to peek
+   *                          on an empty ArrayRingBuffer.
    */
-  T peek();
+  T peek() throws RuntimeException;
 
   /**
    * Determines if a given item is in the buffer.
@@ -72,6 +78,5 @@ public interface BoundedQueue<T> extends Iterable<T> {
     return fillCount() == capacity();
   }
 
-  @Override
   Iterator<T> iterator();
 }

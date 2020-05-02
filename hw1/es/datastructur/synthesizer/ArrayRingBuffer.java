@@ -86,9 +86,11 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
    * Adds item x to the end.
    *
    * @param x - the item to be added.
+   * @throws RuntimeException with the String “Ring Buffer overflow” when a user attempts to enqueue
+   *                          into a full ArrayRingBuffer.
    */
   @Override
-  public void enqueue(T x) {
+  public void enqueue(T x) throws RuntimeException {
     if (isFull()) {
       throw new RuntimeException("Ring buffer overflow");
     }
@@ -105,9 +107,11 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
    * Deletes and returns item from the front.
    *
    * @return the item from the front.
+   * @throws RuntimeException with the String “Ring Buffer underflow” when a user attempts to
+   *                          dequeue on an empty ArrayRingBuffer.
    */
   @Override
-  public T dequeue() {
+  public T dequeue() throws RuntimeException {
     if (isEmpty()) {
       throw new RuntimeException("Ring buffer underflow");
     }
@@ -126,9 +130,11 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
    * Returns (but do not delete) item from the front.
    *
    * @return (but do not delete) item from the front.
+   * @throws RuntimeException with the String “Ring Buffer underflow” when a user attempts to peek
+   *                          on an empty ArrayRingBuffer.
    */
   @Override
-  public T peek() {
+  public T peek() throws RuntimeException {
     if (isEmpty()) {
       throw new RuntimeException("Ring buffer underflow");
     }
