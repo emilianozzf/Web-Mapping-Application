@@ -7,10 +7,12 @@ package es.datastructur.synthesizer;
 public class GuitarString {
   /** Constants. Do not change. In case you're curious, the keyword final
    * means the values cannot be changed at runtime. */
+
   /**
    * Sampling Rate
    */
   private static final int SR = 44100;
+
   /**
    * Energy decay factor
    */
@@ -23,6 +25,8 @@ public class GuitarString {
 
   /**
    * Create a guitar string of the given frequency.
+   *
+   * @param frequency - the given frequency.
    */
   public GuitarString(double frequency) {
     int capacity = (int) Math.round(SR / frequency);
@@ -55,7 +59,9 @@ public class GuitarString {
    * algorithm.
    */
   public void tic() {
-    double newDouble = (buffer.dequeue() + sample()) * 0.5 * DECAY;
+    double front = buffer.dequeue();
+    double next = sample();
+    double newDouble = (front + next) * 0.5 * DECAY;
     buffer.enqueue(newDouble);
   }
 
