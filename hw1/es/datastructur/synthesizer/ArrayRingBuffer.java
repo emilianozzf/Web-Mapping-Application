@@ -52,6 +52,8 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
 
   /**
    * Creates a new ArrayRingBuffer with the given capacity.
+   *
+   * @param capacity - the given capacity.
    */
   public ArrayRingBuffer(int capacity) {
     first = 0;
@@ -62,6 +64,8 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
 
   /**
    * Returns size of the buffer.
+   *
+   * @return size of the buffer.
    */
   @Override
   public int capacity() {
@@ -70,6 +74,8 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
 
   /**
    * Returns number of items currently in the buffer.
+   *
+   * @return number of items currently in the buffer.
    */
   @Override
   public int fillCount() {
@@ -77,14 +83,16 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
   }
 
   /**
-   * Adds x to the end of the ring buffer. If there is no room, then throw new
-   * RuntimeException("Ring buffer overflow").
+   * Adds item x to the end.
+   *
+   * @param x - the item to be added.
    */
   @Override
   public void enqueue(T x) {
     if (isFull()) {
       throw new RuntimeException("Ring buffer overflow");
     }
+
     rb[last] = x;
     last += 1;
     if (last == capacity()) {
@@ -94,14 +102,16 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
   }
 
   /**
-   * Dequeue oldest item in the ring buffer. If the buffer is empty, then throw new
-   * RuntimeException("Ring buffer underflow").
+   * Deletes and returns item from the front.
+   *
+   * @return the item from the front.
    */
   @Override
   public T dequeue() {
     if (isEmpty()) {
       throw new RuntimeException("Ring buffer underflow");
     }
+
     T item = rb[first];
     rb[first] = null;
     first += 1;
@@ -113,19 +123,24 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
   }
 
   /**
-   * Return oldest item, but don't remove it. If the buffer is empty, then throw new
-   * RuntimeException("Ring buffer underflow").
+   * Returns (but do not delete) item from the front.
+   *
+   * @return (but do not delete) item from the front.
    */
   @Override
   public T peek() {
     if (isEmpty()) {
       throw new RuntimeException("Ring buffer underflow");
     }
+
     return rb[first];
   }
 
   /**
-   * Determines if a given item is in the buffer
+   * Determines if a given item is in the buffer.
+   *
+   * @param x - the given item.
+   * @return if a given item is in the buffer.
    */
   @Override
   public boolean contains(T x) {
