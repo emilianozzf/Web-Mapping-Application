@@ -2,6 +2,12 @@ package es.datastructur.synthesizer;
 
 import java.util.Iterator;
 
+/**
+ * An interface which declares all the methods that must be implemented by any class that implements
+ * BoundedQueue.
+ *
+ * @param <T> - the item type.
+ */
 public interface BoundedQueue<T> extends Iterable<T> {
 
   /**
