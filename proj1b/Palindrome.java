@@ -17,6 +17,18 @@ public class Palindrome {
     return res;
   }
 
+  /**
+   * Returns true if the given word is a palindrome, and false otherwise. ‘A’ and ‘a’ should not be
+   * considered equal.
+   *
+   * @param word - the given word.
+   * @return true if the given word is a palindrome, and false otherwise.
+   */
+  public boolean isPalindrome(String word) {
+    Deque<Character> wordDeque = wordToDeque(word);
+    return isPalindromeRecursive(wordDeque);
+  }
+
   private boolean isPalindromeRecursive(Deque<Character> wordDeque) {
     if (wordDeque.size() <= 1) {
       return true;
@@ -28,9 +40,17 @@ public class Palindrome {
     return false;
   }
 
-  public boolean isPalindrome(String word) {
+  /**
+   * Returns true if the given word is a palindrome according to the given character comparator, and
+   * false otherwise.
+   *
+   * @param word - the given word.
+   * @param cc   - the given character comparator.
+   * @return true if the given word is a palindrome, and false otherwise.
+   */
+  public boolean isPalindrome(String word, CharacterComparator cc) {
     Deque<Character> wordDeque = wordToDeque(word);
-    return isPalindromeRecursive(wordDeque);
+    return isPalindromeRecursiveOffByOne(wordDeque, cc);
   }
 
   private boolean isPalindromeRecursiveOffByOne(Deque<Character> wordDeque,
@@ -43,10 +63,5 @@ public class Palindrome {
       return isPalindromeRecursiveOffByOne(wordDeque, cc);
     }
     return false;
-  }
-
-  public boolean isPalindrome(String word, CharacterComparator cc) {
-    Deque<Character> wordDeque = wordToDeque(word);
-    return isPalindromeRecursiveOffByOne(wordDeque, cc);
   }
 }
