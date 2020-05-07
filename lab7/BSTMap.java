@@ -2,24 +2,39 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+/**
+ * My implementation BSTMap that implements interface Map61B.
+ *
+ * @param <K> - the key type.
+ * @param <V> - the value type
+ */
 public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
-  // root of BSTMap
+
   private Node root;
 
+  /**
+   * Private helper class Node representing a tree node.
+   */
   private class Node {
-    // sorted by key
+
     private K key;
-    // associated data
     private V val;
-    // left and right subtrees
     private Node left;
     private Node right;
-    // number of nodes in subtree
     private int size;
 
+    /**
+     * Constructor for Node.
+     *
+     * @param key  - the given key.
+     * @param val  - the given value.
+     * @param size - the size of the subtree.
+     */
     public Node(K key, V val, int size) {
       this.key = key;
       this.val = val;
+      this.left = null;
+      this.right = null;
       this.size = size;
     }
   }
@@ -28,6 +43,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
    * Initializes an empty symbol table.
    */
   public BSTMap() {
+    this.root = null;
   }
 
   /**
@@ -40,34 +56,57 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
   /**
    * Returns true if this map contains a mapping for the specified key.
+   *
+   * @param key - the specified key.
+   * @return true if this map contains a mapping for the specified key.
+   * @throws IllegalArgumentException if called with a null key.
    */
   @Override
-  public boolean containsKey(K key) {
-    if (key == null) throw new IllegalArgumentException("argument to contains() is null");
+  public boolean containsKey(K key) throws IllegalArgumentException {
+    if (key == null) {
+      throw new IllegalArgumentException("argument to contains() is null");
+    }
+
     return get(key) != null;
   }
 
   /**
    * Returns the value to which the specified key is mapped, or null if this map contains no mapping
    * for the key.
+   *
+   * @param key - the specified key.
+   * @return the value to which the specified key is mapped, or null if this map contains no mapping
+   * for the key.
+   * @throws IllegalArgumentException if called with a null key.
    */
   @Override
-  public V get(K key) {
+  public V get(K key) throws IllegalArgumentException {
+    if (key == null) {
+      throw new IllegalArgumentException("calls get() with a null key");
+    }
+
     return get(root, key);
   }
 
   private V get(Node x, K key) {
-    if (key == null) throw new IllegalArgumentException("calls get() with a null key");
-    if (x == null) return null;
+    if (x == null) {
+      return null;
+    }
 
     int cmp = key.compareTo(x.key);
-    if      (cmp < 0) return get(x.left, key);
-    else if (cmp > 0) return get(x.right, key);
-    else              return x.val;
+    if (cmp < 0) {
+      return get(x.left, key);
+    } else if (cmp > 0) {
+      return get(x.right, key);
+    } else {
+      return x.val;
+    }
   }
 
   /**
    * Returns the number of key-value mappings in this map.
+   *
+   * @return the number of key-value mappings in this map.
    */
   @Override
   public int size() {
@@ -75,31 +114,50 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
   }
 
   private int size(Node x) {
-    if (x == null) return 0;
-    else return x.size;
+    if (x == null) {
+      return 0;
+    } else {
+      return x.size;
+    }
   }
 
   /**
    * Associates the specified value with the specified key in this map.
+   *
+   * @param key   - the specified key.
+   * @param value - the specified value.
+   * @throws IllegalArgumentException if called with a null key.
    */
   @Override
-  public void put(K key, V value) {
-    if (key == null) throw new IllegalArgumentException("calls put() with a null key");
+  public void put(K key, V value) throws IllegalArgumentException {
+    if (key == null) {
+      throw new IllegalArgumentException("calls put() with a null key");
+    }
+
     root = put(root, key, value);
   }
 
   private Node put(Node x, K key, V val) {
-    if (x == null) return new Node(key, val, 1);
+    if (x == null) {
+      return new Node(key, val, 1);
+    }
+
     int cmp = key.compareTo(x.key);
-    if      (cmp < 0) x.left  = put(x.left,  key, val);
-    else if (cmp > 0) x.right = put(x.right, key, val);
-    else              x.val = val;
+    if (cmp < 0) {
+      x.left = put(x.left, key, val);
+    } else if (cmp > 0) {
+      x.right = put(x.right, key, val);
+    } else {
+      x.val = val;
+    }
     x.size = 1 + size(x.left) + size(x.right);
     return x;
   }
 
   /**
    * Returns a Set view of the keys contained in this map.
+   *
+   * @return a Set view of the keys contained in this map.
    */
   @Override
   public Set<K> keySet() {
@@ -120,7 +178,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
   /**
    * Prints out your BSTMap in order of increasing Key.
    */
-  public void printInOrder(){
+  public void printInOrder() {
     printInOrder(root);
   }
 
@@ -128,6 +186,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     if (x == null) {
       return;
     }
+
     printInOrder(x.left);
     System.out.print(x.key + ": " + x.val + " ");
     printInOrder(x.right);
@@ -136,8 +195,6 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
   /**
    * Removes the mapping for the specified key from this map if present. Not required for Lab 8. If
    * you don't implement this, throw an UnsupportedOperationException.
-   *
-   * @param key
    */
   @Override
   public V remove(K key) throws UnsupportedOperationException {
@@ -147,9 +204,6 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
   /**
    * Removes the entry for the specified key only if it is currently mapped to the specified value.
    * Not required for Lab 8. If you don't implement this, throw an UnsupportedOperationException.
-   *
-   * @param key
-   * @param value
    */
   @Override
   public V remove(K key, V value) throws UnsupportedOperationException {
@@ -157,7 +211,8 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
   }
 
   /**
-   * Returns an iterator over elements of type {@code T}.
+   * Returns an iterator over elements of type {@code T}. Not required for Lab 8. If you don't
+   * implement this, throw an UnsupportedOperationException.
    *
    * @return an Iterator.
    */
