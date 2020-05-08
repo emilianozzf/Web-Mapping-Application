@@ -3,7 +3,7 @@
  */
 public class ExperimentHelper {
 
-    /** Returns the internal path length for an optimum binary search tree of
+    /**  Returns the internal path length for an optimum binary search tree of
      *  size N. Examples:
      *  N = 1, OIPL: 0
      *  N = 2, OIPL: 1
