@@ -1,12 +1,11 @@
 package hw3.hash;
 
-import java.util.ArrayList;
 import java.util.List;
-import javax.xml.stream.FactoryConfigurationError;
 
 public class OomageTestUtility {
     public static boolean haveNiceHashCodeSpread(List<Oomage> oomages, int M) {
         int[] buckets = new int[M];
+
         for (Oomage oomage: oomages) {
             int idx = (oomage.hashCode() & 0x7FFFFFFF) % M;
             buckets[idx] += 1;

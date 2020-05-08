@@ -23,17 +23,16 @@ public class TestSimpleOomage {
 
     @Test
     public void testHashCodePerfect() {
-        Set<Integer> hashCodesSet = new HashSet<>();
+        Set<Integer> hashSet = new HashSet<>();
         for (int i = 0; i < 256; i += 5) {
             for (int j = 0; j < 256; j += 5) {
                 for (int k = 0; k < 256; k += 5) {
                     SimpleOomage oomage = new SimpleOomage(i, j, k);
-                    assertFalse(hashCodesSet.contains(oomage.hashCode()));
-                    hashCodesSet.add(oomage.hashCode());
+                    assertFalse(hashSet.contains(oomage.hashCode()));
+                    hashSet.add(oomage.hashCode());
                 }
             }
         }
-
     }
 
     @Test

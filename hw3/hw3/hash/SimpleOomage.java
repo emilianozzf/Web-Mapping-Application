@@ -12,28 +12,6 @@ public class SimpleOomage implements Oomage {
     private static final double WIDTH = 0.01;
     private static final boolean USE_PERFECT_HASH = true;
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SimpleOomage that = (SimpleOomage) o;
-        return red == that.red && green == that.green && blue == that.blue;
-    }
-
-    @Override
-    public int hashCode() {
-        if (!USE_PERFECT_HASH) {
-            return red + green + blue;
-        } else {
-            int hashCode = 0;
-            hashCode = hashCode + red;
-            hashCode = 256 * hashCode + green;
-            hashCode = 256 * hashCode + blue;
-            return hashCode;
-        }
-    }
-
     public SimpleOomage(int r, int g, int b) {
         if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
             throw new IllegalArgumentException();
@@ -59,6 +37,32 @@ public class SimpleOomage implements Oomage {
         return new SimpleOomage(red, green, blue);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SimpleOomage that = (SimpleOomage) o;
+        return red == that.red && green == that.green && blue == that.blue;
+    }
+
+    @Override
+    public int hashCode() {
+        if (!USE_PERFECT_HASH) {
+            return red + green + blue;
+        } else {
+            int hashCode = 0;
+            hashCode = hashCode + red;
+            hashCode = 256 * hashCode + green;
+            hashCode = 256 * hashCode + blue;
+            return hashCode;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "R: " + red + ", G: " + green + ", B: " + blue;
+    }
+
     public static void main(String[] args) {
         System.out.println("Drawing 4 random simple Oomages.");
         randomSimpleOomage().draw(0.25, 0.25, 1);
@@ -67,7 +71,5 @@ public class SimpleOomage implements Oomage {
         randomSimpleOomage().draw(0.75, 0.25, 1);
     }
 
-    public String toString() {
-        return "R: " + red + ", G: " + green + ", B: " + blue;
-    }
+
 } 
