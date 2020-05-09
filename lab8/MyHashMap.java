@@ -4,20 +4,27 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 /**
- * Your implementation MyHashMap should implement this interface. To do so,
- * append "implements Map61B<K, V>" to the end of your "public class..."
- * declaration, though you can use other formal type parameters if you'd like.
- *
- * MyHashMap operations should all be constant amortized time, assuming that the hashCode of any
- * objects inserted spread things out nicely (hint: every Object in Java has its own hashCode method).
+ * MyHashMap that implements Map61B.
  */
 public class MyHashMap<K, V> implements Map61B<K, V> {
-  public class Entry<K, V> {
+
+  /**
+   * Entry node for MyHashMap.
+   */
+  private static class Entry<K, V> {
+
     private K key;
     private V value;
-    private Entry<K, V> next;
+    private Entry next;
 
-    private Entry(K key, V value, Entry<K, V> next) {
+    /**
+     * Constructor for Entry node.
+     *
+     * @param key   - the specified key.
+     * @param value - the specified value.
+     * @param next  - the next entry node.
+     */
+    private Entry(K key, V value, Entry next) {
       this.key = key;
       this.value = value;
       this.next = next;
@@ -27,14 +34,13 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
   private int numOfBuckets;
   private double loadFactor;
   private Entry<K, V>[] buckets;
-  private HashSet<K> keySet;
   private int size;
+  private HashSet<K> keySet;
 
   /**
-   * Your MyHashMap should initially have a number of buckets equal to initialSize.
-   *
-   * You should increase the size of your MyHashMap when the load factor exceeds the set loadFactor.
-   *
+   * MyHashMap should initially have a number of buckets equal to initialSize and a load factor
+   * equal to loadFactor.
+   * <p>
    * If initialSize and loadFactor aren’t given, you should set defaults initialSize = 16 and
    * loadFactor = 0.75 (as Java’s built-in HashMap does).
    */
@@ -43,31 +49,34 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
   }
 
   /**
-   * Your MyHashMap should initially have a number of buckets equal to initialSize.
-   *
-   * You should increase the size of your MyHashMap when the load factor exceeds the set loadFactor.
-   *
+   * MyHashMap should initially have a number of buckets equal to initialSize and a load factor
+   * equal to loadFactor.
+   * <p>
    * If initialSize and loadFactor aren’t given, you should set defaults initialSize = 16 and
    * loadFactor = 0.75 (as Java’s built-in HashMap does).
+   *
+   * @param initialSize - the specified initial number of buckets.
    */
   public MyHashMap(int initialSize) {
     this(initialSize, 0.75);
   }
 
   /**
-   * Your MyHashMap should initially have a number of buckets equal to initialSize.
-   *
-   * You should increase the size of your MyHashMap when the load factor exceeds the set loadFactor.
-   *
+   * MyHashMap should initially have a number of buckets equal to initialSize and a load factor
+   * equal to loadFactor.
+   * <p>
    * If initialSize and loadFactor aren’t given, you should set defaults initialSize = 16 and
    * loadFactor = 0.75 (as Java’s built-in HashMap does).
+   *
+   * @param initialSize - the specified initial number of buckets.
+   * @param loadFactor  - the specified loadFactor
    */
   public MyHashMap(int initialSize, double loadFactor) {
     this.numOfBuckets = initialSize;
     this.loadFactor = loadFactor;
-    this.buckets = (Entry<K, V>[]) new Entry[this.numOfBuckets];
-    this.keySet = new HashSet<>();
+    this.buckets = new Entry[this.numOfBuckets];
     this.size = 0;
+    this.keySet = new HashSet<>();
   }
 
   /**
@@ -75,15 +84,16 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
    */
   @Override
   public void clear() {
-    this.numOfBuckets = 16;
-    this.loadFactor = 0.75;
-    this.buckets = (Entry<K, V>[]) new Entry[this.numOfBuckets];
-    this.keySet = new HashSet<>();
+    this.buckets = new Entry[this.numOfBuckets];
     this.size = 0;
+    this.keySet = new HashSet<>();
   }
 
   /**
    * Returns true if this map contains a mapping for the specified key.
+   *
+   * @param key - the specified key.
+   * @return true if this map contains a mapping for the specified key.
    */
   @Override
   public boolean containsKey(K key) {
@@ -92,6 +102,10 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
 
   /**
    * Returns the value to which the specified key is mapped, or null if this map contains no mapping
+   * for the key.
+   *
+   * @param key - the specified key.
+   * @return the value to which the specified key is mapped, or null if this map contains no mapping
    * for the key.
    */
   @Override
@@ -106,7 +120,19 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
   }
 
   /**
+   * Private helper hash function.
+   *
+   * @param key - the specified key.
+   * @return valid index of the key.
+   */
+  private int hash(K key) {
+    return (key.hashCode() & 0x7fffffff) % numOfBuckets;
+  }
+
+  /**
    * Returns the number of key-value mappings in this map.
+   *
+   * @return the number of key-value mappings in this map.
    */
   @Override
   public int size() {
@@ -116,6 +142,9 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
   /**
    * Associates the specified value with the specified key in this map. If the map previously
    * contained a mapping for the key, the old value is replaced.
+   *
+   * @param key   - the specified key.
+   * @param value - the mapped value.
    */
   @Override
   public void put(K key, V value) {
@@ -127,7 +156,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     if (!containsKey(key)) {
       Entry<K, V> newEntry = new Entry<>(key, value, buckets[i]);
       buckets[i] = newEntry;
-      size++;
+      size += 1;
       keySet.add(key);
     } else {
       for (Entry<K, V> e = buckets[i]; e != null; e = e.next) {
@@ -136,11 +165,28 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         }
       }
     }
+  }
 
+  private void resize(int chains) {
+    MyHashMap<K, V> temp = new MyHashMap<>(chains, this.loadFactor);
+
+    for (int i = 0; i < numOfBuckets; i++) {
+      for (Entry<K, V> e = buckets[i]; e != null; e = e.next) {
+        temp.put(e.key, e.value);
+      }
+    }
+
+    this.numOfBuckets = temp.numOfBuckets;
+    this.loadFactor = temp.loadFactor;
+    this.buckets = temp.buckets;
+    this.size = temp.size;
+    this.keySet = temp.keySet;
   }
 
   /**
    * Returns a Set view of the keys contained in this map.
+   *
+   * @return a Set view of the keys contained in this map.
    */
   @Override
   public Set<K> keySet() {
@@ -170,24 +216,6 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
    */
   @Override
   public Iterator<K> iterator() {
-    return null;
-  }
-
-  private void resize(int chains) {
-    MyHashMap<K, V> temp = new MyHashMap<>(chains, this.loadFactor);
-    for (int i = 0; i < numOfBuckets; i++) {
-      for (Entry<K, V> e = buckets[i]; e != null; e = e.next) {
-        temp.put(e.key, e.value);
-      }
-    }
-    this.numOfBuckets = temp.numOfBuckets;
-    this.loadFactor = temp.loadFactor;
-    this.buckets = temp.buckets;
-    this.keySet = temp.keySet;
-    this.size  = temp.size;
-  }
-
-  private int hash(K key) {
-    return (key.hashCode() & 0x7fffffff) % numOfBuckets;
+    return keySet.iterator();
   }
 }
