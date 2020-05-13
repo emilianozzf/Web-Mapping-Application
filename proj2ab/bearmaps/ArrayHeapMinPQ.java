@@ -47,7 +47,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
    * @param initCapacity - the given initial capacity.
    */
   public ArrayHeapMinPQ(int initCapacity) {
-    this.minHeap = (Node[]) new Object[initCapacity + 1];
+    this.minHeap = new ArrayHeapMinPQ.Node[initCapacity+1];
     this.itemIndexMapping = new HashMap<>();
     this.size = 0;
   }
@@ -120,6 +120,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     size -= 1;
     sink(1);
     minHeap[size() + 1] = null;
+    itemIndexMapping.remove(min);
 
     if ((size() > 0) && (size() == (minHeap.length - 1) / 4)) {
       resize(minHeap.length / 2);
@@ -168,7 +169,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
    * @param capacity - the given capacity.
    */
   private void resize(int capacity) {
-    Node[] minHeapTmp = (Node[]) new Object[capacity];
+    Node[] minHeapTmp = new ArrayHeapMinPQ.Node[capacity];
 
     for (int i = 1; i <= size; i++) {
       minHeapTmp[i] = minHeap[i];
