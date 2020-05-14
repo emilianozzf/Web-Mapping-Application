@@ -1,12 +1,15 @@
 package bearmaps;
 
+import edu.princeton.cs.algs4.Stopwatch;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 
 public class KDTreeTest {
+
   private static Random r = new Random();
 
   private static KDTree buildLectureTree() {
@@ -51,6 +54,43 @@ public class KDTreeTest {
     testWithNPointsAndQQueries(pointCount, queryCount);
   }
 
+  @Test
+  public void timeWith10000PointsAnd2000Queries() {
+    int pointCount = 10000;
+    int queryCount = 2000;
+    timeWithNPointsAndQQueries(pointCount, queryCount);
+  }
+
+  @Test
+  public void timeWithVariousNumberOfPoints() {
+    List<Integer> pointCounts = List.of(1000, 10000, 100000, 1000000);
+    for (int N : pointCounts) {
+      timeWithNPointsAndQQueries(N, 10000);
+    }
+  }
+
+  @Test
+  public void compareTimingOfNaiveVsKdTreeTheSpec() {
+    List<Point> randomPoints = randomPoints(100000);
+    KDTree kd = new KDTree(randomPoints);
+    NaivePointSet nps = new NaivePointSet(randomPoints);
+    List<Point> queryPoints = randomPoints(10000);
+
+    Stopwatch sw = new Stopwatch();
+    for (Point p : queryPoints) {
+      nps.nearest(p.getX(), p.getY());
+    }
+    double time = sw.elapsedTime();
+    System.out.println("Naive 10000 queries on 100000 points: " + time);
+
+    sw = new Stopwatch();
+    for (Point p : queryPoints) {
+      kd.nearest(p.getX(), p.getY());
+    }
+    time = sw.elapsedTime();
+    System.out.println("KD 10000 queries on 100000 points: " + time);
+  }
+
   private void testWithNPointsAndQQueries(int pointCount, int queryCount) {
     List<Point> points = randomPoints(pointCount);
     NaivePointSet nps = new NaivePointSet(points);
@@ -62,6 +102,21 @@ public class KDTreeTest {
       Point actual = kd.nearest(p.getX(), p.getY());
       assertEquals(expected, actual);
     }
+  }
+
+  private void timeWithNPointsAndQQueries(int pointCount, int queryCount) {
+    List<Point> points = randomPoints(pointCount);
+    KDTree kd = new KDTree(points);
+
+    Stopwatch sw = new Stopwatch();
+    List<Point> queries = randomPoints(queryCount);
+    for (Point p : queries) {
+      Point actual =
+          kd.nearest(p.getX(), p.getY());
+    }
+    System.out.println(
+        "Time elapsed for " + queryCount + " queries on " + pointCount + " points: " + sw
+            .elapsedTime());
   }
 
   private List<Point> randomPoints(int N) {

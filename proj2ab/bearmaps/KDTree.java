@@ -92,6 +92,19 @@ public class KDTree implements PointSet {
    */
   @Override
   public Point nearest(double x, double y) {
-    return null;
+    return nearest(root, new Point(x, y), root).point;
+  }
+
+  private Node nearest(Node n, Point goal, Node best) {
+    if (n == null) {
+      return best;
+    }
+
+    if (Point.distance(n.point, goal) < Point.distance(best.point, goal)) {
+      best = n;
+    }
+    best = nearest(n.left, goal, best);
+    best = nearest(n.right, goal, best);
+    return best;
   }
 }
