@@ -92,10 +92,10 @@ public class KDTree implements PointSet {
    */
   @Override
   public Point nearest(double x, double y) {
-    return nearest(root, new Point(x, y), root).point;
+    return nearest(root, new Point(x, y), root, true).point;
   }
 
-  private Node nearest(Node n, Point goal, Node best) {
+  private Node nearest(Node n, Point goal, Node best, boolean isHorizontal) {
     if (n == null) {
       return best;
     }
@@ -103,8 +103,19 @@ public class KDTree implements PointSet {
     if (Point.distance(n.point, goal) < Point.distance(best.point, goal)) {
       best = n;
     }
-    best = nearest(n.left, goal, best);
-    best = nearest(n.right, goal, best);
+
+    Node goodSide;
+    Node badSide;
+    if (compare(goal, n.point, isHorizontal) < 0) {
+      goodSide = n.left;
+      badSide = n.right;
+    } else {
+      goodSide = n.right;
+      badSide = n.left;
+    }
+
+    best = nearest(goodSide, goal, best, !isHorizontal);
+    best = nearest(badSide, goal, best, !isHorizontal);
     return best;
   }
 }
