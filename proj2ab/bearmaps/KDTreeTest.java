@@ -25,13 +25,6 @@ public class KDTreeTest {
     return kd;
   }
 
-  private static void buildTreeWithDoubles() {
-    Point p1 = new Point(2, 3);
-    Point p2 = new Point(2, 3);
-
-    KDTree kd = new KDTree(List.of(p1, p2));
-  }
-
   @Test
   public void testNearestDemoSlides() {
     KDTree kd = buildLectureTree();

@@ -42,6 +42,14 @@ public class KDTree implements PointSet {
     }
   }
 
+  /**
+   * Adds Point p to k-d tree rooted at Node n and returns the added node.
+   *
+   * @param n            - the root node of k-d tree.
+   * @param p            - the new point.
+   * @param isHorizontal - if the current node is horizontal.
+   * @return the added node.
+   */
   private Node add(Node n, Point p, boolean isHorizontal) {
     if (n == null) {
       return new Node(p);
@@ -58,6 +66,14 @@ public class KDTree implements PointSet {
     return n;
   }
 
+  /**
+   * Compares p1 and p2.
+   *
+   * @param p1           - the point 1.
+   * @param p2           - the point 2.
+   * @param isHorizontal - if the current node is horizontal.
+   * @return comparison integer.
+   */
   private int compare(Point p1, Point p2, boolean isHorizontal) {
     int xCmp = Double.compare(p1.getX(), p2.getX());
     int yCmp = Double.compare(p1.getY(), p2.getY());
@@ -66,19 +82,14 @@ public class KDTree implements PointSet {
       return 0;
     }
 
-    if (isHorizontal) {
-      if (xCmp != 0) {
-        return xCmp;
-      } else {
-        return 1;
-      }
-    } else {
-      if (yCmp != 0) {
-        return yCmp;
-      } else {
-        return 1;
-      }
+    if (xCmp == 0 || yCmp == 0) {
+      return 1;
     }
+
+    if (isHorizontal) {
+        return xCmp;
+    }
+    return yCmp;
   }
 
   /**
@@ -115,7 +126,17 @@ public class KDTree implements PointSet {
     }
 
     best = nearest(goodSide, goal, best, !isHorizontal);
-    best = nearest(badSide, goal, best, !isHorizontal);
+
+    Point bestBadSidePoint;
+    if (isHorizontal) {
+      bestBadSidePoint = new Point(n.point.getX(), goal.getY());
+    } else {
+      bestBadSidePoint = new Point(goal.getX(), n.point.getY());
+    }
+
+    if (Point.distance(bestBadSidePoint, goal) < Point.distance(best.point, goal)) {
+      best = nearest(badSide, goal, best, !isHorizontal);
+    }
     return best;
   }
 }
