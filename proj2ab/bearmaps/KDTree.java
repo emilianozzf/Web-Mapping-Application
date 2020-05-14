@@ -94,17 +94,4 @@ public class KDTree implements PointSet {
   public Point nearest(double x, double y) {
     return null;
   }
-
-
-  public static void main(String[] args) {
-    Point p1 = new Point(2, 3);
-    Point p2 = new Point(4, 2);
-    Point p3 = new Point(4, 2);
-    Point p4 = new Point(4, 5);
-    Point p5 = new Point(3, 3);
-    Point p6 = new Point(1, 5);
-    Point p7 = new Point(4, 4);
-
-    KDTree kd = new KDTree(List.of(p1, p2, p3, p4, p5, p6, p7));
-  }
 }
