@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by Jenny Huang on 3/12/19.
  */
-public class TestMyTrieSet {
+public class TestMyMyTrieSet {
 
     // assumes add/contains work
     @Test
@@ -55,7 +55,7 @@ public class TestMyTrieSet {
     }
 
     public static void main(String[] args) {
-        jh61b.junit.TestRunner.runTests(TestMyTrieSet.class);
+        jh61b.junit.TestRunner.runTests(TestMyMyTrieSet.class);
     }
 
 
