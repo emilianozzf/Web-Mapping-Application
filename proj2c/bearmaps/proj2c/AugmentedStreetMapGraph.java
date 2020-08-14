@@ -15,10 +15,29 @@ import java.util.*;
  */
 public class AugmentedStreetMapGraph extends StreetMapGraph {
 
+  private MyTrieSet trie;
+  private Map<String, List<Node>> nameToNode;
+
   public AugmentedStreetMapGraph(String dbPath) {
     super(dbPath);
-    // You might find it helpful to uncomment the line below:
-    // List<Node> nodes = this.getNodes();
+    trie = new MyTrieSet();
+    nameToNode = new HashMap<>();
+    List<Node> nodes = this.getNodes();
+    for (Node node : nodes) {
+      if (node.name() == null) {
+        continue;
+      }
+      String cleanedName = cleanString(node.name());
+      trie.add(cleanedName);
+      if (!nameToNode.containsKey(cleanedName)) {
+        List<Node> newList = new ArrayList<>();
+        newList.add(node);
+        nameToNode.put(cleanedName, newList);
+      } else {
+        nameToNode.get(cleanedName).add(node);
+      }
+
+    }
   }
 
 
@@ -59,7 +78,13 @@ public class AugmentedStreetMapGraph extends StreetMapGraph {
    * cleaned <code>prefix</code>.
    */
   public List<String> getLocationsByPrefix(String prefix) {
-    return new LinkedList<>();
+    List<String> matchedNames = trie.keysWithPrefix(prefix);
+    for (int i = 0; i < matchedNames.size(); i++) {
+      for (Node n: nameToNode.get(matchedNames.get(i))) {
+        matchedNames.set(i, n.name());
+      }
+    }
+    return matchedNames;
   }
 
   /**
@@ -73,7 +98,19 @@ public class AugmentedStreetMapGraph extends StreetMapGraph {
    * -> String, The actual name of the node. <br> "id" -> Number, The id of the node. <br>
    */
   public List<Map<String, Object>> getLocations(String locationName) {
-    return new LinkedList<>();
+    List<Map<String, Object>> locations = new ArrayList<>();
+    String cleanName = cleanString(locationName);
+    if (nameToNode.containsKey(cleanName)) {
+      for (Node n: nameToNode.get(cleanName)) {
+        Map<String, Object> locationInfo = new HashMap<>();
+        locationInfo.put("lon", n.lon());
+        locationInfo.put("lat", n.lat());
+        locationInfo.put("name", n.name());
+        locationInfo.put("id", n.id());
+        locations.add(locationInfo);
+      }
+    }
+    return locations;
   }
 
 
