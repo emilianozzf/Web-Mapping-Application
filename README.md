@@ -15,7 +15,7 @@ INTRODUCTION
 
 A Web mapping application for location search, display and optimal route planning.
 
-<img src="https://imgflip.com/gif/4eg0pj">
+<img src="https://drive.google.com/file/d/1cVYscL1jiui5eelNaHYXnyfXY9oIm84f/view?usp=sharing">
 
 
 REQUIREMENTS
