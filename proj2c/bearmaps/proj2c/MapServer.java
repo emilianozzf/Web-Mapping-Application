@@ -15,7 +15,7 @@ public class MapServer {
      * @param args
      */
     public static void main(String[] args) {
-
+        System.out.println(System.getProperty("java.classpath"));
         MapServerInitializer.initializeServer(APIRouteHandlerFactory.handlerMap);
 
     }

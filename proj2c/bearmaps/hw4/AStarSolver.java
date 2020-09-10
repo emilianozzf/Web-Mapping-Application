@@ -2,8 +2,11 @@ package bearmaps.hw4;
 
 import bearmaps.proj2ab.ArrayHeapMinPQ;
 import edu.princeton.cs.algs4.Stopwatch;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +33,7 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
    */
   public AStarSolver(AStarGraph<Vertex> input, Vertex start, Vertex end, double timeout) {
 
-    Stopwatch sw = new Stopwatch();
+    Instant startTime = Instant.now();
 
     solutionWeight = 0.0;
     solution = new ArrayList<>();
@@ -42,7 +45,7 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
     edgeTo.put(start, null);
     pq.add(start, 0.0 + input.estimatedDistanceToGoal(start, end));
 
-    while (pq.size() != 0 && !pq.getSmallest().equals(end) && sw.elapsedTime() < timeout) {
+    while (pq.size() != 0 && !pq.getSmallest().equals(end) && Duration.between(startTime, Instant.now()).getSeconds() < timeout) {
       Vertex u = pq.removeSmallest();
       numStatesExplored += 1;
       for (WeightedEdge<Vertex> e : input.neighbors(u)) {
@@ -50,7 +53,7 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
       }
     }
 
-    if (sw.elapsedTime() >= timeout) {
+    if (Duration.between(startTime, Instant.now()).getSeconds() >= timeout) {
       outcome = SolverOutcome.TIMEOUT;
     } else if (pq.size() == 0) {
       outcome = SolverOutcome.UNSOLVABLE;
@@ -67,7 +70,7 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
       Collections.reverse(solution);
     }
 
-    timeSpent = sw.elapsedTime();
+    timeSpent = Duration.between(startTime, Instant.now()).getSeconds();
   }
 
   private void relax(AStarGraph<Vertex> input, Vertex end, WeightedEdge<Vertex> e) {

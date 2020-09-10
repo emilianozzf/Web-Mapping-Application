@@ -79,7 +79,7 @@ public class RoutingAPIHandler extends APIRouteHandler<Map<String, Double>, Map<
     private String getDirectionsText() {
 
         List<Router.NavigationDirection> directions = Router.routeDirections(SEMANTIC_STREET_GRAPH, ROUTE_LIST);
-        if (directions == null || directions.isEmpty()) {
+        if (directions.isEmpty()) {
             return "";
         }
         StringBuilder sb = new StringBuilder();
