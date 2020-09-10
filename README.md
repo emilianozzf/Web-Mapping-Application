@@ -1,4 +1,4 @@
-# [WEB MAPPING APPLICATION] (http://bearmaps-web-mapping.herokuapp.com/)
+# [WEB MAPPING APPLICATION](http://bearmaps-web-mapping.herokuapp.com/)
 
 CONTENTS OF THIS FILE
 ---------------------
