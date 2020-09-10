@@ -15,7 +15,7 @@ INTRODUCTION
 
 A Web mapping application for location search, display and optimal route planning.
 
-![](zoom-in-and-zoom-out.gif)
+<img src="zoom-in-and-zoom-out.gif">
 
 
 REQUIREMENTS
